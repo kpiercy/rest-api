@@ -62,5 +62,12 @@ module.exports = (sequelize, DataTypes) => {
           modelName: 'Job',
       }
   )
+    Job.sync()
+        .then(() => {
+            console.log('Job table synced successfully')
+        })
+        .catch((error) => {
+            console.error('Unable to sync Job table: ', error)
+        })
   return Job;
 };

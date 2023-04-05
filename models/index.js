@@ -1,40 +1,48 @@
 'use strict'
+require('dotenv').config()
 
-const fs = require('fs')
-const path = require('path')
-const Sequelize = require('sequelize')
-const process = require('process')
-const basename = path.basename(__filename)
-const env = process.env.NODE_ENV || 'development'
-const config = require(__dirname + '/../config/' + process.env.NODE_ENV + '-db')
+var fs = require('fs')
+var path = require('path')
+var Sequelize = require('sequelize')
+var basename = path.basename(__filename)
+var env = process.env.NODE_ENV || 'development'
+var config = require(__dirname + '/../config/config.js')[env]
+var db = {}
 
-const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
-    host: config.HOST,
-    port: config.PORT,
-    dialect: config.dialect,
-    pool: {
-        max: config.pool.max,
-        min: config.pool.min,
-        acquire: config.pool.acquire,
-        idle: config.pool.idle,
-    },
-})
+if (config.use_env_variable) {
+    var sequelize = new Sequelize(process.env[config.use_env_variable], config)
+} else {
+    var sequelize = new Sequelize(
+        config.database,
+        config.username,
+        config.password,
+        {
+            host: config.host,
+            port: config.port,
+            dialect: config.dialect,
+            pool: {
+                max: parseInt(config.pool.max),
+                min: parseInt(config.pool.min),
+                acquire: parseInt(config.pool.acquire),
+                idle: parseInt(config.pool.idle),
+            },
+        }
+    )
+}
 
-const db = {}
-
-fs.readdirSync(__dirname)
+fs.readdirSync(__dirname + '/rest')
     .filter((file) => {
         return (
             file.indexOf('.') !== 0 &&
             file !== basename &&
-            file.slice(-3) === '.js' &&
-            file.indexOf('.test.js') === -1
+            file.slice(-3) === '.js'
         )
     })
     .forEach((file) => {
-        const model = require(path.join(__dirname, file))(
+        var model = require(path.join(__dirname + '/rest', file))
+        (
             sequelize,
-            Sequelize.DataTypes
+            Sequelize.DataTypes,
         )
         db[model.name] = model
     })
@@ -48,6 +56,13 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
-db.parents = require('./parent.js')(sequelize, Sequelize)
+sequelize
+    .authenticate()
+    .then(() => {
+        console.log('DATABASE: ' + env + ' db connected successfully')
+    })
+    .catch((error) => {
+        console.error('Unable to connect to the database: ', error)
+    })
 
 module.exports = db

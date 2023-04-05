@@ -1,23 +1,22 @@
 require('dotenv').config()
 
-const { baseUrl } = require(`../config/${process.env.NODE_ENV}`)
+const env = process.env.NODE_ENV || 'development'
+const { baseUrl } = require(__dirname + '/../config/config.js')[env]
 const ApiError = require('../utils/api-error')
-const db = require('../models')
-const Parent = db.parents
-const Op = db.Sequelize.Op
+const Sequelize = require('sequelize')
 
 const create_parents = async (req, res, next) => {
     const data = JSON.stringify(req.body)
     console.log(data)
 
-    const parent = {
+    const attributes = {
         name: req.body.name,
         status: req.body.status,
         erp_id: req.body.erp_id,
         erp_code: req.body.erp_code
     }
 
-    Parent.create(parent)
+    Parent.create(attributes)
         .then(data => {
             res.send(data)
         })

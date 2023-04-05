@@ -130,5 +130,12 @@ module.exports = (sequelize, DataTypes) => {
           modelName: 'Client',
       }
   )
+    Client.sync()
+        .then(() => {
+            console.log('Client table synced successfully')
+        })
+        .catch((error) => {
+            console.error('Unable to sync Client table: ', error)
+        })
   return Client;
 };

@@ -1,7 +1,10 @@
+require('dotenv').config()
+const env = process.env.NODE_ENV || 'development'
+
 const swaggerJsDoc = require('swagger-jsdoc')
 const swaggerUi = require('swagger-ui-express')
 const { version } = require('../package.json')
-const { baseUrl } = require(`../config/${process.env.NODE_ENV}`)
+const { baseUrl } = require(__dirname + '/../config/config')[env]
 
 const swaggerOptions = {
     failOnErrors: true,
@@ -55,7 +58,7 @@ function swaggerDocs(app, port) {
         res.setHeader('Content-Type', 'application/json')
         res.send(swaggerSpec)
     })
-    console.log(`Docs available at ${baseUrl.url}/docs`)
+    console.log(`DOCUMENTATION: ${baseUrl.url}/docs`)
 }
 
 module.exports = swaggerDocs

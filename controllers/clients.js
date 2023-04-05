@@ -1,9 +1,10 @@
 require('dotenv').config()
+const env = process.env.NODE_ENV || 'development'
 
 const sequelize = require('sequelize')
-const { baseUrl } = require(`../config/${process.env.NODE_ENV}`)
+const { baseUrl } = require('../config/config.js')[env]
 const ApiError = require('../utils/api-error')
-const Client = require('../models/client')
+const Client = require('../models/rest/client')
 
 const create_clients = async (req, res, next) => {
     const data = req.body

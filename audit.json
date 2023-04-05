@@ -1,0 +1,16 @@
+{
+    "keepSettings": {
+        "type": 2,
+        "amount": 45
+    },
+    "auditFilename": "audit.json",
+    "hashType": "md5",
+    "extension": "",
+    "files": [
+        {
+            "date": 1680667234485,
+            "name": "C:\\Users\\SPUD\\Documents\\GitHub\\rest-api/logs/access-2023-04-05.log",
+            "hash": "e566682d78b3f02b39c6044292ad8b05"
+        }
+    ]
+}
