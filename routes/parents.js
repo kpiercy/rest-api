@@ -2,6 +2,7 @@ require('dotenv').config()
 
 const express = require('express')
 const router = express.Router({ mergeParams: true })
+const gaurd = require('express-jwt-permissions')
 const ops = require('../controllers/parents')
 
 /**
@@ -27,7 +28,10 @@ const ops = require('../controllers/parents')
  *                      items:
  *                          $ref:
  */
-router.post('/', ops.create_parents)
+router.post('/', gaurd.check([
+    'create:parents',
+    'is:admin'
+]), ops.create_parents)
 
 //read parent(s)
 
