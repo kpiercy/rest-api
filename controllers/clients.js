@@ -1,21 +1,45 @@
 require('dotenv').config()
-const env = process.env.NODE_ENV || 'development'
 
-const sequelize = require('sequelize')
-const { baseUrl } = require('../config/config.js')[env]
+const env = process.env.NODE_ENV || 'development'
+const { baseUrl } = require(__dirname + '/../config/config.js')[env]
 const ApiError = require('../utils/api-error')
-const Client = require('../models/rest/client')
+const Sequelize = require('sequelize')
+const db = require('../models/index')
 
 const create_clients = async (req, res, next) => {
-    const data = req.body
-    
-    try{
-        const clients = await Client.create(data)
+    const attributes = req.body
 
-        res.status(201).json(clients.id)
-    }catch (err) {
-        next(ApiError.badRequest(err))
-    }
+    await db.Client.bulkCreate(attributes, {
+        validate: true,
+        fields: [
+            'gid',
+            'id',
+            'ParentId',
+            'name',
+            'status',
+            'erp_id',
+            'erp_parent_id',
+            'erp_code',
+            'erp_alt_code',
+            'erp_pos_code',
+            'type',
+            'terms',
+            'taxable',
+            'tax_exempt',
+            'postage_cost',
+            'postage_sell',
+            'aio_invoice',
+            'cost_only',
+            'bulk_bill'
+        ],
+    })
+        .then((data) => {
+            res.send(data)
+        })
+        .catch((err) => {
+            next(ApiError.badRequest(err))
+            console.log(err)
+        })
 }
 
 const find_clients = async (req, res, next) => {
@@ -23,5 +47,5 @@ const find_clients = async (req, res, next) => {
 }
 
 module.exports = {
-    create_clients
+    create_clients,
 }
