@@ -42,24 +42,42 @@ module.exports = (sequelize, DataTypes) => {
           },
 
           name: {
-            type: DataTypes.STRING(50),
-            unique: true,
-            allowNull: false,
+              type: DataTypes.STRING(50),
+              unique: true,
+              allowNull: false,
           },
 
           rootPath: {
-            type: DataTypes.STRING(50),
-            allowNull: true,
+              type: DataTypes.STRING(50),
+              allowNull: true,
           },
 
           isActive: {
-            type: DataTypes.BOOLEAN,
-            defaultValue: true,
-          }
+              type: DataTypes.BOOLEAN,
+              defaultValue: true,
+          },
       },
       {
+          defaultScope: {
+              attributes: {
+                  exclude: ['gid'],
+              },
+          },
           sequelize,
           modelName: 'Job',
+        //   scopes: {
+        //       accessLevel(value) {
+        //           return {
+        //               where: {
+        //                   accessLevel: {
+        //                       [Op.gte]: value,
+        //                   },
+        //               },
+        //           }
+        //       },
+        //       sequelize,
+        //       modelName: 'Job',
+        //   },
       }
   )
     Job.sync()

@@ -53,11 +53,28 @@ module.exports = (sequelize, DataTypes) => {
               type: DataTypes.STRING(20),
               allowNull: true,
           },
-
       },
       {
+          defaultScope: {
+              attributes: {
+                  exclude: ['gid'],
+              },
+          },
           sequelize,
-          modelName: 'Parent',
+          modelName: 'Job',
+          //   scopes: {
+          //       accessLevel(value) {
+          //           return {
+          //               where: {
+          //                   accessLevel: {
+          //                       [Op.gte]: value,
+          //                   },
+          //               },
+          //           }
+          //       },
+          //       sequelize,
+          //       modelName: 'Job',
+          //   },
       }
   )
   Parent

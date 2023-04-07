@@ -45,7 +45,10 @@ module.exports = (sequelize, DataTypes) => {
               type: DataTypes.STRING(15),
               allowNull: false,
               validate: {
-                  isIn: [['Live', 'Hold', 'Sample', 'Proof']],
+                  isIn: {
+                      args: [['Live', 'Hold', 'Sample', 'Proof']],
+                      msg: 'Status must be Live, Hold, Sample or Proof'
+                  },
               },
           },
 
@@ -78,7 +81,10 @@ module.exports = (sequelize, DataTypes) => {
               type: DataTypes.STRING(15),
               allowNull: false,
               validate: {
-                  isIn: [['Direct', 'Reseller', 'AdHoc', 'StandAlone']],
+                  isIn: {
+                      args: [['Direct', 'Reseller', 'AdHoc', 'StandAlone']],
+                      msg: 'Type must be Direct, Reseller, AdHoc or StandAlone',
+                  },
               },
           },
 
@@ -86,7 +92,10 @@ module.exports = (sequelize, DataTypes) => {
               type: DataTypes.STRING(15),
               allowNull: false,
               validate: {
-                  isIn: [['NET10', 'NET30', 'NET60', 'NET90', 'NET120']],
+                  isIn: {
+                      args: [['NET10', 'NET30', 'NET60', 'NET90', 'NET120']],
+                      msg: 'Terms must be NET10, NET30, NET60, NET90 or NET120',
+                  },
               },
           },
 
@@ -126,8 +135,26 @@ module.exports = (sequelize, DataTypes) => {
           },
       },
       {
+          defaultScope: {
+              attributes: {
+                  exclude: ['gid'],
+              },
+          },
           sequelize,
-          modelName: 'Client',
+          modelName: 'Job',
+          //   scopes: {
+          //       accessLevel(value) {
+          //           return {
+          //               where: {
+          //                   accessLevel: {
+          //                       [Op.gte]: value,
+          //                   },
+          //               },
+          //           }
+          //       },
+          //       sequelize,
+          //       modelName: 'Job',
+          //   },
       }
   )
     Client.sync()
