@@ -16,13 +16,13 @@ const fileStreamRotator = require('file-stream-rotator')
 //const ejs = require('ejs')
 const db = require('./models')
 
+
 //APP
 const app = express()
 
 
 //MIDDLEWARE
-//const authenticateToken = require('./middleware/authenticate')
-const apiErrorHandler = require('./utils/api-error-handler')
+const reqAuth = require('./middleware/auth')
 const swagger = require('./utils/swagger')
 const ApiError = require('./utils/api-error')
 
@@ -58,8 +58,7 @@ app.use(express.static('public'))
 app.use(express.json({limit: '50mb'}))
 app.use(express.urlencoded({extended: true, limit: '50mb'}))
 app.use(logger('combined', { stream: rotatingLogStream }))
-//app.use(logger('dev'))
-app.use(apiErrorHandler)
+app.use(logger('dev'))
 
 
 //ENDPOINTS
@@ -70,8 +69,8 @@ app.use('/services', serviceRoutes)
 
 
 //404 HANDLING
-app.use((req, res, next) => {
-    next(ApiError.notFound())
+app.use((err, req, res, next) => {
+    next(ApiError.notFound(err))
 })
 
 
