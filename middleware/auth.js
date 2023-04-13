@@ -2,10 +2,10 @@ require('dotenv').config()
 const env = process.env.NODE_ENV || 'development'
 const config = require(__dirname + '/../config/config.js')[env]
 
-const jwt = require('express-jwt')
+const { expressjwt: jwt } = require('express-jwt')
 const jwks = require('jwks-rsa')
 
-const jwtCheck = jwt({
+var jwtCheck = jwt({
         secret: jwks.expressJwtSecret({
             cache: true,
             rateLimit: true,
