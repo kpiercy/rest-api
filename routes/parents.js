@@ -2,7 +2,7 @@ require('dotenv').config()
 
 const express = require('express')
 const router = express.Router({ mergeParams: true })
-const gaurd = require('express-jwt-permissions')
+const gaurd = require('express-jwt-permissions')()
 const ops = require('../controllers/parents')
 
 /**
