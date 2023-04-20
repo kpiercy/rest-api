@@ -15,7 +15,7 @@ const ops = require('../controllers/users')
 //authorize user
 /**
  * @swagger
- * /users:
+ * /users/authorize:
  *  post:
  *      summary: use to authorize user
  *      tags: [Users]
@@ -55,10 +55,15 @@ router.post(
     ops.create_users
 )
 
-//read parent(s)
+//read user(s)
+router.get(
+    '/:id',
+    gaurd.check(['read:users']),
+    ops.read_user
+)
 
-//update parent
+//update user
 
-//delete parent
+//delete user
 
 module.exports = router
