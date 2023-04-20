@@ -14,7 +14,6 @@ const fs = require('fs-extra')
 //const path = ('path')
 const fileStreamRotator = require('file-stream-rotator')
 //const ejs = require('ejs')
-const db = require('./models')
 
 
 //APP
@@ -22,9 +21,10 @@ const app = express()
 
 
 //MIDDLEWARE
-const reqAuth = require('./middleware/auth')
+const jwtCheck = require('./middleware/auth')
 const swagger = require('./utils/swagger')
 const ApiError = require('./utils/api-error')
+const db = require('./models')
 
 
 //ROUTES
@@ -63,9 +63,9 @@ app.use(logger('dev'))
 
 //ENDPOINTS
 swagger(app, process.env.PORT)
-app.use('/parents', parentRoutes)
-app.use('/clients', clientRoutes)
-app.use('/services', serviceRoutes)
+app.use('/parents', jwtCheck, parentRoutes)
+app.use('/clients', jwtCheck, clientRoutes)
+app.use('/services', jwtCheck, serviceRoutes)
 
 
 //404 HANDLING
